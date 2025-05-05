@@ -5,6 +5,14 @@ interface Props {
   movie: Movie;
 }
 
+type Movie = {
+  title: string;
+  description: string;
+  imgUrl: string;
+  imdbUrl: string;
+  imdbId: string;
+};
+
 export const MovieCard: React.FC<Props> = ({ movie }) => {
   const { imdbUrl, imgUrl, description, title } = movie;
 
