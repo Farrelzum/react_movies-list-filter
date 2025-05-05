@@ -1,5 +1,5 @@
-import React, { FormEventHandler } from 'react';
-import { useState } from 'react';
+import React from 'react';
+import { useState, useEffect } from 'react';
 import './App.scss';
 import { MoviesList } from './components/MoviesList';
 import moviesFromServer from './api/movies.json';
@@ -9,20 +9,19 @@ export const App: React.FC = () => {
   const [query, setQuery] = useState('');
   const [visibleMovies, setVisibleMovies] = useState([...moviesFromServer]);
 
-  const searchQuery: FormEventHandler<HTMLInputElement> = event => {
-    const value = event.currentTarget.value.trim();
-
-    setQuery(value);
-
+  useEffect(() => {
     const filteredMovies = moviesFromServer.filter(({ title, description }) => {
       return (
-        title.toLowerCase().includes(value.toLowerCase()) ||
-        description.toLowerCase().includes(value.toLowerCase())
+        title.toLowerCase().includes(query.toLowerCase()) ||
+        description.toLowerCase().includes(query.toLowerCase())
       );
     });
 
     setVisibleMovies(filteredMovies);
-  };
+  }, [query]);
+
+  const handleInputChange: React.ChangeEventHandler<HTMLInputElement> = event =>
+    setQuery(event.currentTarget.value.trim());
 
   return (
     <div className="page">
@@ -40,7 +39,7 @@ export const App: React.FC = () => {
                 id="search-query"
                 className="input"
                 placeholder="Type search word"
-                onChange={searchQuery}
+                onChange={handleInputChange}
               />
             </div>
           </div>
